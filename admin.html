@@ -1,1 +1,56 @@
-admin.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zenlect Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin-form input { margin: 5px; padding: 5px; }
+    .product-preview { border: 1px solid #ccc; padding: 10px; margin: 10px 0; background: #fff; }
+  </style>
+</head>
+<body>
+  <header><h1>Admin Panel - Zenlect</h1>
+    <nav>
+      <a href="index.html">Home</a> |
+      <a href="shop.html">Shop</a> |
+      <a href="contact.html">Contact</a> |
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Manage Products</h2>
+    <div class="admin-form">
+      <input type="text" id="productName" placeholder="Product Name">
+      <input type="number" id="productPrice" placeholder="Price">
+      <button onclick="addProduct()">Add Product</button>
+    </div>
+    <h3>Live Preview</h3>
+    <div id="previewArea"></div>
+  </main>
+  <footer>&copy; 2025 Zenlect. All rights reserved.</footer>
+  <script>
+    let products = JSON.parse(localStorage.getItem("adminProducts") || "[]");
+    
+    function renderProducts() {
+      const preview = document.getElementById("previewArea");
+      preview.innerHTML = products.map(p => 
+        '<div class="product-preview"><strong>' + p.name + '</strong><br>Price: $' + p.price + '</div>'
+      ).join('');
+    }
+
+    function addProduct() {
+      const name = document.getElementById("productName").value;
+      const price = parseFloat(document.getElementById("productPrice").value);
+      if (!name || isNaN(price)) return alert("Enter valid name and price.");
+      products.push({ name, price });
+      localStorage.setItem("adminProducts", JSON.stringify(products));
+      renderProducts();
+      document.getElementById("productName").value = "";
+      document.getElementById("productPrice").value = "";
+    }
+
+    renderProducts();
+  </script>
+</body>
+</html>
